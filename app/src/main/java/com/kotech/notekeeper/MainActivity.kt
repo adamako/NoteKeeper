@@ -1,17 +1,21 @@
 package com.kotech.notekeeper
 
+import android.annotation.SuppressLint
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.annotation.RequiresApi
 
 class MainActivity : AppCompatActivity() {
-    var notePosition= POSITION_NOTE_SET
-    lateinit var spinner: Spinner
-    lateinit var textNoteTitle: EditText
-    lateinit var textNoteText: EditText
+    private var notePosition= POSITION_NOTE_SET
+    private lateinit var spinner: Spinner
+    private lateinit var textNoteTitle: EditText
+    private lateinit var textNoteText: EditText
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +42,41 @@ class MainActivity : AppCompatActivity() {
         val coursePosition= DataManager.courses.values.indexOf(note.course)
         spinner.setSelection(coursePosition)
 
-
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.action_next -> {
+                nextNote()
+                true
+            }
+            R.id.action_settings -> true
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun nextNote() {
+        notePosition++
+        displayNote()
+        invalidateOptionsMenu()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if(notePosition>=DataManager.notes.lastIndex){
+            val menuItem=menu?.findItem(R.id.action_next)
+            if(menuItem!=null){
+                menuItem.icon=getDrawable(R.drawable.ic_baseline_block_24)
+                menuItem.isEnabled=false
+
+            }
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
 }
