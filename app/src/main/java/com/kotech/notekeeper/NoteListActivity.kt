@@ -19,11 +19,17 @@ class NoteListActivity : AppCompatActivity() {
         fab=findViewById(R.id.fab)
         noteList=findViewById(R.id.noteList)
 
-        val courseAdapter= ArrayAdapter(this, android.R.layout.simple_list_item_1, DataManager.courses.values.toList())
-        noteList.adapter=courseAdapter
+        val noteAdapter= ArrayAdapter(this, android.R.layout.simple_list_item_1, DataManager.notes)
+        noteList.adapter=noteAdapter
 
         fab.setOnClickListener {
             val activityIntent= Intent(this, MainActivity::class.java)
+            startActivity(activityIntent)
+        }
+
+        noteList.setOnItemClickListener { parent, view, position, id ->
+           val activityIntent= Intent(this, MainActivity::class.java)
+           activityIntent.putExtra(NOTE_POSITION,position)
             startActivity(activityIntent)
         }
     }
