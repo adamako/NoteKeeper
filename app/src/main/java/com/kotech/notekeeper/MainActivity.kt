@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
@@ -29,9 +30,14 @@ class MainActivity : AppCompatActivity() {
         coursesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         spinner.adapter=coursesAdapter
-        notePosition=intent.getIntExtra(NOTE_POSITION, POSITION_NOTE_SET)
+        notePosition=savedInstanceState?.getInt(NOTE_POSITION, POSITION_NOTE_SET)?:intent.getIntExtra(NOTE_POSITION, POSITION_NOTE_SET)
         if(notePosition!= POSITION_NOTE_SET)
             displayNote()
+        else{
+          val note=NoteInfo()
+            DataManager.notes.add(note)
+            notePosition=DataManager.notes.lastIndex
+        }
     }
 
     private fun displayNote() {
@@ -79,4 +85,22 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onPrepareOptionsMenu(menu)
     }
+
+    override fun onPause() {
+        super.onPause()
+        saveNote()
+    }
+
+    private fun saveNote() {
+        val note= DataManager.notes[notePosition]
+        note.text=textNoteText.text.toString()
+        note.title=textNoteTitle.text.toString()
+        note.course= spinner.selectedItem as CourseInfo
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(NOTE_POSITION, notePosition)
+    }
+
 }
