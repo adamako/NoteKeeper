@@ -12,7 +12,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.RequiresApi
 
-class MainActivity : AppCompatActivity() {
+class NoteActivity : AppCompatActivity() {
     private var notePosition= POSITION_NOTE_SET
     private lateinit var spinner: Spinner
     private lateinit var textNoteTitle: EditText

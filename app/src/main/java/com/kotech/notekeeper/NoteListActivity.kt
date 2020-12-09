@@ -5,38 +5,34 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class NoteListActivity : AppCompatActivity() {
     lateinit var fab: FloatingActionButton
-    lateinit var noteList:ListView
+    lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_list)
         setSupportActionBar(findViewById(R.id.toolbar))
         fab=findViewById(R.id.fab)
-        noteList=findViewById(R.id.noteList)
-
+        recyclerView=findViewById(R.id.recyclerview)
         val noteAdapter= ArrayAdapter(this, android.R.layout.simple_list_item_1, DataManager.notes)
-        noteList.adapter=noteAdapter
+
+        recyclerView.layoutManager=LinearLayoutManager(this)
+
 
         fab.setOnClickListener {
-            val activityIntent= Intent(this, MainActivity::class.java)
+            val activityIntent= Intent(this, NoteActivity::class.java)
             startActivity(activityIntent)
         }
 
-        noteList.setOnItemClickListener { parent, view, position, id ->
-           val activityIntent= Intent(this, MainActivity::class.java)
 
-           activityIntent.putExtra(NOTE_POSITION,position)
-            startActivity(activityIntent)
-        }
     }
 
     override fun onResume() {
         super.onResume()
-        (noteList.adapter as ArrayAdapter<*>).notifyDataSetChanged()
     }
 }
