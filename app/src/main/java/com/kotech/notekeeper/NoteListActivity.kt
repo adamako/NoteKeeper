@@ -19,10 +19,9 @@ class NoteListActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
         fab=findViewById(R.id.fab)
         recyclerView=findViewById(R.id.recyclerview)
-        val noteAdapter= ArrayAdapter(this, android.R.layout.simple_list_item_1, DataManager.notes)
 
         recyclerView.layoutManager=LinearLayoutManager(this)
-        recyclerView.adapter= NoteAdapter(DataManager.notes)
+        recyclerView.adapter= NoteAdapter(this,DataManager.notes)
 
 
         fab.setOnClickListener {
@@ -35,5 +34,6 @@ class NoteListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        recyclerView.adapter?.notifyDataSetChanged()
     }
 }
