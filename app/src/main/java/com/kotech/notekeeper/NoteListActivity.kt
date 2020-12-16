@@ -22,6 +22,7 @@ class NoteListActivity : AppCompatActivity() {
         val noteAdapter= ArrayAdapter(this, android.R.layout.simple_list_item_1, DataManager.notes)
 
         recyclerView.layoutManager=LinearLayoutManager(this)
+        recyclerView.adapter= NoteAdapter(DataManager.notes)
 
 
         fab.setOnClickListener {
