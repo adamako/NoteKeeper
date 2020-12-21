@@ -50,7 +50,12 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         navigationView= findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
+        val drawerToggle= ActionBarDrawerToggle(this, drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close)
+        drawerLayout.addDrawerListener(drawerToggle)
+        drawerToggle.syncState()
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.setHomeButtonEnabled(true)
 
         displayNotes()
 
@@ -85,6 +90,9 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         when(item.itemId){
             R.id.nav_courses -> {
                 displayCourses()
+            }
+            android.R.id.home -> {
+                drawerLayout.openDrawer(GravityCompat.START)
             }
             R.id.nav_notes -> {
                 displayNotes()
